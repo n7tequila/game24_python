@@ -2,7 +2,7 @@
 
 实现的 24 点游戏求解器，使用 ToT（Train of Thought）来寻找解法。
 
-程序参考[https://github.com/AI-FE/game24-solver](https://github.com/AI-FE/game24-solver)实现，基本就是将javascript代码用python实现，去除了原来的cache实现，主要是为了体验一下推理过程，顺便学一下python，底层AI模型基座用的硅基流动的Deepseek V3模型
+程序参考[https://github.com/AI-FE/game24-solver](https://github.com/AI-FE/game24-solver)实现，基本就是将javascript代码用python实现，去除了原来的cache实现，主要是为了体验一下推理过程，顺便学一下python，底层AI模型基座用的是Deepseek V3模型
 
 以下的开发思路是抄的，不是我写的，寻求javascript版本的请移步[AI-FE/game24-solver](https://github.com/AI-FE/game24-solver)
 
