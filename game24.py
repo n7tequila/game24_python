@@ -1,5 +1,7 @@
+import json
 import re
 from collections import deque
+from os import replace
 from typing import List, Set, Dict, Optional
 
 import yaml
@@ -78,14 +80,14 @@ class Game24Solver:
                 messages=[{"role": "user", "content": prompt}],
                 **self.model_params
             )
-            return self._parse_proposals(response.choices[0].message.content)
+            return self._parse_json_proposals(response.choices[0].message.content)
         except Exception as e:
             print(f"API Error: {str(e)}")
             return []
 
     def _evaluate_state(self, numbers: List[int], steps: List[str]) -> Optional[Dict]:
         """评估当前数字状态"""
-        print("对想法进行可行性评估...")
+        print(f"对想法进行可行性评估...")
 
         prompt = self._create_evaluate_prompt(numbers)
         try:
@@ -105,11 +107,14 @@ class Game24Solver:
                         .replace("\\times", "*")
                         .replace("/", "÷")
                         .replace("\\[", "[")
-                        .replace("\approx", "≈"))
+                        .replace("\\]", "]")
+                        .replace("\approx", "≈")
+                        .replace("**", ""))
         print(f"评估过程：\n{print_reason}")
 
-        if "BINGO" in reason.upper():
+        if "BINGO" in reason.upper() :
             print("😄 找到确定解法！")
+
             return {
                 "success": True,
                 "steps": steps,
@@ -119,6 +124,7 @@ class Game24Solver:
         elif "IMPOSSIBLE" in reason.upper():
             print("该组合无法得到24，跳过")
             return None
+
 
     def _print_current_state(self, current: Dict) -> None:
         """打印当前状态信息"""
@@ -146,6 +152,18 @@ class Game24Solver:
                     continue
 
         return steps
+
+    def _parse_json_proposals(self, proposal_text: str) -> List[Dict]:
+        steps = []
+        data = json.loads(proposal_text)
+        for item in data:
+            steps.append({
+                "operation": item["operation"],
+                "result": item["result"],
+                "remaining": list(map(str, item["remaining_numbers"].split(" ")))
+            })
+
+        return steps;
 
     def _create_evaluate_prompt(self, numbers: List[int]) -> str:
         """创建评估模板"""

@@ -18,6 +18,16 @@ Possible next steps:
 9. 14 - 2 = 12 (left: 8 8 12)
 10. 8 + 8 = 16 (left: 2 14 16)
 
+Only output json format:
+[
+    {{
+        "step_number": "<step_number>",
+        "operation": "<operation>",
+        "result": "<result>",
+        "remaining_numbers": "<remaining_numbers>" 
+    }}
+]
+
 Input: {input}
 Possible next steps:
 """
